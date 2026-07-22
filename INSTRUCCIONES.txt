@@ -1,0 +1,7 @@
+1. En tu repositorio de GitHub, elimina o reemplaza el archivo codigo-fuente.zip anterior.
+2. Sube este nuevo codigo-fuente.zip con el mismo nombre exacto.
+3. Confirma el cambio con Commit changes.
+4. Ve a Actions > Compilar DeSmuME Wii Revival.
+5. Ejecuta Run workflow, o espera a que el push lo ejecute automáticamente.
+6. Si vuelve a aparecer una X roja, descarga Download log archive y súbelo al chat.
+7. Si aparece una palomita verde, descarga el artefacto DeSmuMEWii-Revival-prueba y súbelo al chat antes de copiarlo a la SD.
