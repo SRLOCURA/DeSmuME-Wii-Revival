@@ -1,0 +1,50 @@
+name: Compilar DeSmuME Wii Revival
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: devkitpro/devkitppc:20260503
+
+    steps:
+      - name: Descargar archivos
+        uses: actions/checkout@v4
+
+      - name: Extraer codigo fuente
+        run: |
+          mkdir proyecto
+          unzip -q codigo-fuente.zip -d proyecto
+
+      - name: Compilar y guardar diagnostico
+        shell: bash
+        run: |
+          set -o pipefail
+          cd proyecto
+          make -j2 2>&1 | tee ../build.log
+
+      - name: Preparar paquete para Wii
+        if: success()
+        run: |
+          mkdir -p release/apps/DeSmuMEWii
+          cp proyecto/boot.dol release/apps/DeSmuMEWii/boot.dol
+          cp proyecto/dist/apps/DeSmuMEWii/meta.xml release/apps/DeSmuMEWii/meta.xml
+          cp proyecto/dist/apps/DeSmuMEWii/icon.png release/apps/DeSmuMEWii/icon.png
+
+      - name: Subir registro de compilacion
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: registro-compilacion
+          path: build.log
+          if-no-files-found: warn
+
+      - name: Subir boot.dol de prueba
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: DeSmuMEWii-Revival-prueba
+          path: release/
